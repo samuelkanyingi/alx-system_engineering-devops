@@ -1,0 +1,2 @@
+#!/bin/bash
+cut -d :f1 /etc/passwd |sort| paste -d: /etc/passwd | cut -d: f1,100
