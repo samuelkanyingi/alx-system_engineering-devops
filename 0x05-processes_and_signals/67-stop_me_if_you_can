@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#Bash script that stops 7-highlander.sh process without kill or killall
+pkill -f "bash ./7-highlander"
+if pgrep -f "bash ./7-highlander.sh" >/dev/null; then
+	echo "Process not stopped."
+fi
