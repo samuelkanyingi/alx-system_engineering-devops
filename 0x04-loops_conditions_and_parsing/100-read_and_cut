@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Bash script that displays the content of the file /etc/passwd
+
+# shellcheck disable=SC2034
+file="/etc/passwd"
+
+if [ -e "$file" ]; then
+	while IFS=":" read -r username _ uid _ _ home shell; do
+		echo "$username:$uid:$home"
+	done < "$file"
+else
+	echo "file $file not found"
+fi
