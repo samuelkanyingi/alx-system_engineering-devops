@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#display the content of the file /etc/passwd, using the while loop + IFS
+
+fname="/etc/passwd"
+# shellcheck disable=SC2034
+if [ -e "$fname" ]; then
+	while IFS=":" read -r username _ uid gid info home shell; do
+		IFS=, read -r name passcode <<< "$info"
+
+		echo "The user $name is part of the $gid gang,"
+		echo "lives in $home and rides $shell."
+		echo "{$uid}'s  place is protected by the passcode x,"
+		echo "more info about the user here: $info"
+		echo
+	done < "$fname"
+else
+	echo "File $fname not found"
+fi
