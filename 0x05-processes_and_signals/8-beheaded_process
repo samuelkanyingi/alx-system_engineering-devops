@@ -2,5 +2,5 @@
 #Bash script that kills the process 7-highlander
 pkill -f "bash ./7-highlander"
 if pgrep -f "bash ./7-highlander" >/dev/null; then
-	echo "Process not killed."
+	echo "Process has not been killed."
 fi
