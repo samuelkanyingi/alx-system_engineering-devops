@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#That only shows listening sockets
+
+netstat -tuln
