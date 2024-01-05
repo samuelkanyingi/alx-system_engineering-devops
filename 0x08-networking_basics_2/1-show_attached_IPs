@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 #Show attached IPs
+
 ifconfig
