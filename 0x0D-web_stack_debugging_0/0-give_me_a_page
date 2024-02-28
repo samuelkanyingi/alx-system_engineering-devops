@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
 #Apache
-service apache2 restart
-echo "Hello Holberton" > /var/www/html
+if systemctl is-active --quiet apache2; then
+	echo "apache2 is running"
+else:
+	service apache2 restart
+fi
+echo "Hello Holberton" > /var/www/html/index.html
+
