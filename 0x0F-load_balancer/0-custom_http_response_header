@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+''' Double the number of webservers '''
+#!/bin/bash
+
+# Install Nginx if not already installed
+sudo apt update
+sudo apt install nginx -y
+
+# Define the custom header value
+HOSTNAME=$(hostname)
+
+# Add configuration for custom header to Nginx
+sudo tee /etc/nginx/conf.d/custom_headers.conf > /dev/null <<EOT
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    location / {
+        add_header X-Served-By $HOSTNAME;
+        try_files $uri $uri/ =404;
+    }
+}
+EOT
+
+# Restart Nginx to apply the changes
+sudo systemctl restart nginx
+
