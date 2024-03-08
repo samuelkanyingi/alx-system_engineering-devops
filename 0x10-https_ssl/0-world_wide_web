@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # print domains and subdomains to make our life easier
-r
+
 
 print_subdomain_info() {
     local domain=$1
