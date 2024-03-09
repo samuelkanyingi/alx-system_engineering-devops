@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-'''Using what you did for task #0 configure nginx'''
+#Using what you did for task #0 configure nginx'''
 sed -i 's/#listen 80;/listen 80 default_server;/g' /etc/nginx/nginx.conf
 service nginx restart
