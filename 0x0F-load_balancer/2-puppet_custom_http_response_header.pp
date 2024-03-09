@@ -1,20 +1,25 @@
-tom_http_response_header.pp
-
-# Install Nginx package
+# Install Nginx
 package { 'nginx':
   ensure => installed,
 }
 
-# Define custom Nginx configuration file
-file { '/etc/nginx/conf.d/custom_headers.conf':
+# Define the custom HTTP header configuration file
+file { '/etc/nginx/conf.d/custom_http_header.conf':
   ensure  => present,
-  content => "server {\n\tlocation / {\n\t\tadd_header X-Served-By $hostname;\n\t}\n}",
+  content => "server_tokens off;\nadd_header X-Served-By $::hostname;\n",
   notify  => Service['nginx'],
 }
 
-# Ensure Nginx service is running and enabled
+# Remove the default Nginx virtual host configuration
+file { '/etc/nginx/sites-enabled/default':
+  ensure => absent,
+  notify => Service['nginx'],
+}
+
+# Restart Nginx service
 service { 'nginx':
-  ensure => running,
-  enable => true,
+  ensure  => running,
+  enable  => true,
+  require => Package['nginx'],
 }
 
