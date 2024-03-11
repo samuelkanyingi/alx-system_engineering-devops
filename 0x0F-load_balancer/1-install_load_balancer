@@ -1,5 +1,5 @@
-
-n to install packages if not already installed
+#!/usr/bin/env bash
+#install packages if not already installed
 install() {
     if ! command -v "$1" &> /dev/null; then
         echo "Installing $1..."
