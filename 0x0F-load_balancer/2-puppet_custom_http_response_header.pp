@@ -1,25 +1,26 @@
-# Install Nginx
-package { 'nginx':
-  ensure => installed,
+#Add a custom HTTP header with Puppet
+{ 'update system':
+  command => '/usr/bin/apt-get update',
 }
 
-# Define the custom HTTP header configuration file
-file { '/etc/nginx/conf.d/custom_http_header.conf':
-  ensure  => present,
-  content => "server_tokens off;\nadd_header X-Served-By $::hostname;\n",
+package { 'nginx':
+  ensure  => 'installed',
+  require => Exec['update system'],
+}
+
+file { '/var/www/html/index.html':
+  content => 'Hello World!',
+}
+
+file { '/etc/nginx/sites-available/default':
+  ensure  => 'file',
+  content => template('my_module/nginx_config.erb'),
+  require => Package['nginx'],
   notify  => Service['nginx'],
 }
 
-# Remove the default Nginx virtual host configuration
-file { '/etc/nginx/sites-enabled/default':
-  ensure => absent,
-  notify => Service['nginx'],
-}
-
-# Restart Nginx service
 service { 'nginx':
-  ensure  => running,
-  enable  => true,
+  ensure  => 'running',
   require => Package['nginx'],
 }
 
