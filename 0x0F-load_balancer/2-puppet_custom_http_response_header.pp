@@ -1,25 +1,31 @@
-# Install Nginx
+# Automate the task of creating a custom HTTP header response
+# with Puppet
+exec { 'update system':
+        command => '/usr/bin/apt-get update',
+}
+
 package { 'nginx':
-  ensure => installed,
+  ensure  => 'installed',
+  require => Exec['update system'],
 }
 
-# Define the custom HTTP header configuration file
-file { '/etc/nginx/conf.d/custom_http_header.conf':
-  ensure  => present,
-  content => "server_tokens off;\nadd_header X-Served-By $::hostname;\n",
-  notify  => Service['nginx'],
+file {'/var/www/html/index.html':
+  content => 'Hello there!'
 }
 
-# Remove the default Nginx virtual host configuration
-file { '/etc/nginx/sites-enabled/default':
-  ensure => absent,
-  notify => Service['nginx'],
+exec {'redirect_me':
+  command  => 'sed -i "24i\        rewrite ^/redirect_me https://samservices.tech/  permanent;" /etc/nginx/sites-available/default',
+
+  provider => 'shell'
 }
 
-# Restart Nginx service
-service { 'nginx':
+exec {'HTTP header':
+  command  => 'sed -i "25i\
+	      add_header X-Served-By \$hostname;" /etc/nginx/sites-available/default',
+  provider => 'shell'
+}
+
+service {'nginx':
   ensure  => running,
-  enable  => true,
-  require => Package['nginx'],
+  require => Package['nginx']
 }
-
