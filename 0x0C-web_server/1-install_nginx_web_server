@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-#Install nginx web server
-apt-get update
-apt-get install -y nginx
-echo "server { listen 80; server_name _;
-root /var/www/html;
-index index.html;
-location / { echo 'Hello World!';
-}
-}" > /etc/nginx/sites-available/default
+#Install nginx
+# Update the package lists
+sudo apt-get update
 
-service nginx restart
+# Install nginx
+sudo apt-get install -y nginx
+
+# Configure nginx
+sudo sed -i 's/80 default_server/80/' /etc/nginx/sites-available/default
+sudo sed -i '/listen \[::\]:80 default_server/ a \\treturn 200 "Hello World!";' /etc/nginx/sites-available/default
+
+service nginx start
