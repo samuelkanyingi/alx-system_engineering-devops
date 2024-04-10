@@ -5,6 +5,7 @@ import sys
 
 
 def count_words(subreddit, word_list, after=None, count={}):
+    ''' Write a recursive function that queries the Reddit API '''
     if word_list is None or subreddit is None:
         return
 
@@ -18,10 +19,10 @@ def count_words(subreddit, word_list, after=None, count={}):
                             allow_redirects=False)
 
     if response.status_code != 200:
-        return
-    main_data = response.json()
+        return None
+    _data = response.json()
 
-    data = main_data.get('data')
+    data = _data.get('data')
     children = data.get('children')
 
     for post in children:
@@ -30,11 +31,11 @@ def count_words(subreddit, word_list, after=None, count={}):
         for word in word_list:
             if word.lower() in title:
                 count[word] = count.get(word, 0) + title.count(word.lower())
-        after = main_data.get('data', {}).get('after')
+        after = _data.get('data', {}).get('after')
     if after:
         count_words(subreddit, word_list, after, count)
     else:
-        sorted_counts = sorted(count.items(), key=lambda x: (-x[1],
+        sorted_ = sorted(count.items(), key=lambda x: (-x[1],
                                x[0].lower()))
-        for word, count in sorted_counts:
+        for word, count in sorted_:
             print(f"{word.lower()}: {count}")
